@@ -1,16 +1,19 @@
+#include <netinet/in.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+//#include <arpa/inet.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <string.h>
+//#include <unistd.h>
 
 int main (void) {
   int ret = 0;
   struct sockaddr_in sk_addr;
 
-  memset (& sk_addr, 0, sizeof (sockaddr_in));
+  memset (& sk_addr, 0, sizeof (struct sockaddr_in));
   sk_addr.sin_family = AF_INET;
   sk_addr.sin_port = htons (1100);
   sk_addr.sin_addr.s_addr = INADDR_ANY;
@@ -21,7 +24,9 @@ int main (void) {
     return 1;
   }
 
-  ret = bind (socket_fd, (struct sockaddr *) & sk_addr, sizeof (sockaddr_in));
+  ret = bind (socket_fd,
+      (struct sockaddr *) & sk_addr,
+      sizeof (struct sockaddr_in));
   if (ret == -1) {
     printf ("bind (~) failed.\n\r");
     close (socket_fd);
